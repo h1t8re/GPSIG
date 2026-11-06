@@ -66,39 +66,37 @@ void print_coordinate_of_the_map(map *MAp)
 
 }
 
-map *construct_the_map(map *MAp, int *coordinate)
+map *construct_the_map(map *MAp, int *coordinate, int x, int y)
 {
-	int *counter = coordinate;
-	if(coordinate[0] == 0)
+	printf("x = %d | y = %d\n", x, y);
+	if(coordinate[0] == x)
 	{
 		MAp->right = initialize_map();
 		MAp->right->coordinate[0] = coordinate[0];
 		MAp->right->coordinate[1] = coordinate[1];
 		MAp->right->left = MAp;
 	}
-	if(coordinate[1] == 0)
+	else if(coordinate[1] == y)
         {
                 MAp->down = initialize_map();
                 MAp->down->coordinate[0] = coordinate[0];
                 MAp->down->coordinate[1] = coordinate[1];
         	MAp->down->up = MAp;
 	}
-	if(MAp->coordinate[0]+1 < coordinate[0])
+	if(coordinate[0] > x)
 	{
 		MAp->right = initialize_map();
 		MAp->right->left = MAp;
-		counter[0]--;		
-		construct_the_map(MAp->right, counter);
+		construct_the_map(MAp->right, coordinate, x+1, y);
 	}
-	if(MAp->coordinate[1]+1 < coordinate[1])
+	else if(coordinate[1] > y)
         {               
                 MAp->down = initialize_map();
 		MAp->down->up = MAp;
-                counter[1]--;
-                construct_the_map(MAp->down, counter);
-        }
+                construct_the_map(MAp->down, coordinate, x, y+1);
+	}
 
-	return NULL;
+	return MAp;
 }
 
 map **parse_data_and_construct_the_map(const char *data)
@@ -114,6 +112,8 @@ map **parse_data_and_construct_the_map(const char *data)
 	char **array0 = strsplit_v1(strdup(data), strdup(spliter0));
 	char **array1;
 	char **array2;
+	int x = 0;
+	int y = 0;
 	while(array0[i] != '\0')
 	{
 		array1 = strsplit_v1(strdup(array0[i]), strdup(spliter1));
@@ -128,9 +128,8 @@ map **parse_data_and_construct_the_map(const char *data)
 			if(strlen(array2[j]) != 0)
 			{
 				coord = get_xy(array2[j]);
-				MAp[k] = construct_the_map(MAp[k], coord);
+				MAp[k] = construct_the_map(MAp[k], coord, 0, 0);
 				printf("coord = (%d, %d)  ", coord[0], coord[1]);
-				print_coordinate_of_the_map(MAp[k]);
 			}
 			j++;
 		}
