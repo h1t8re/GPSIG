@@ -1,0 +1,6 @@
+cd stdlib;
+./install;
+cp -v stdlib.h ../include/stdlib.h
+cp -v stdlib.o ../lib/stdlib.o
+cd ..;
+gcc -Wall -g lib/stdlib.o find.c -o find;
