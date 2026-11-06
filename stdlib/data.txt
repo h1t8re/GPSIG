@@ -1,0 +1,4 @@
+0: ip0 port0
+1: ip1 port1
+   2: group 0 ip 0
+2: group 0 ip 1

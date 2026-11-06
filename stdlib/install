@@ -1,0 +1,27 @@
+echo "Compiling C library\n\n";
+gcc -Wall -c stdlib.c -o stdlib.o;
+echo "\n\ndone\n\n";
+echo "\n\nCompiling tests\n\n";
+gcc -Wall -g test_strlen.c stdlib.o -o test_strlen;
+gcc -Wall -g test_strdup.c stdlib.o -o test_strdup;
+gcc -Wall -g test_strcontains.c stdlib.o -o test_strcontains;
+gcc -Wall -g test_strcmp.c stdlib.o -o test_strcmp;
+gcc -Wall -g test_strconcatenate.c stdlib.o -o test_strconcatenate;
+gcc -Wall -g test_read_input.c stdlib.o -o test_read_input;
+gcc -Wall -g test_read_file_v1.c stdlib.o -o test_read_file_v1;
+gcc -Wall -g test_find_string_position.c stdlib.o -o test_find_string_position;
+gcc -Wall -g test_strsplit_v1.c stdlib.o -o test_strsplit_v1;
+gcc -Wall -g test_get_data_by_key.c stdlib.o -o test_get_data_by_key;
+
+echo "\n\nExecuting tests\n\n";
+./test_strlen;
+./test_strdup;
+./test_strcontains;
+./test_strcmp;
+./test_strconcatenate;
+./test_read_file_v1;
+./test_find_string_position;
+./test_strsplit_v1;
+./test_get_data_by_key;
+./test_read_input;
+echo "\n\ndone\n\n";

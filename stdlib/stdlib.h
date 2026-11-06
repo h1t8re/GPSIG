@@ -1,0 +1,18 @@
+int strlen(const char *str);
+char *strdup(const char *str);
+int strcontains(const char *str0, const char *str1);
+int strcmp(const char *str0, const char *str1);
+int strcmp_mirror(const char *str1, const char  *str0);
+const char *strconcatenate(const char *str0, const char *str1);
+const char *read_input();
+const char *read_file(const char *restrict file_name);
+const char *read_file_v1(const char *restrict file_name);
+const int shift_mask_left(const int mask, const int i);
+const int and_operation(const int number, const int mask_shifted);
+const int shift_result_right(const int number, const int i);
+void convert_integer_to_binary(int *restrict array, const int number, const int mask, const int architecture);
+double pow(double x, double y);
+int convert_binary_to_integer(int *array, int architecture);
+int find_string_position(const char *buffer, const char *string, const int position);
+char **strsplit_v1(const char *string, const char *spliter);
+char **get_data_by_key(char *data, char *key, char *separator);
