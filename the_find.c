@@ -57,11 +57,11 @@ void print_the_map(map *Map)
 		printf("(%d, %d)\n", Map->coordinate[0], Map->coordinate[1]);
 	if(Map->right != NULL)
 		print_the_map(Map->right);
-	if(Map->down != NULL)
+	else if(Map->down != NULL)
 		print_the_map(Map->down);
-	if(Map->up != NULL)
+	else if(Map->up != NULL)
 		print_the_map(Map->up);
-	if(Map->left != NULL)
+	else if(Map->left != NULL)
 		print_the_map(Map->left);
 }
 
@@ -143,6 +143,8 @@ map **parse_data_and_construct_the_map(const char *data)
 
 map *linking_the_map(map *Map, map *MAp)
 {
+	if(Map != NULL)
+	{
 	if((Map->coordinate[0] == MAp->coordinate[0]) & (Map->coordinate[1] == MAp->coordinate[1]))
 	{
 		Map = MAp;
@@ -151,16 +153,22 @@ map *linking_the_map(map *Map, map *MAp)
 	}
 	if(Map->right != NULL)
 	{
-		printf("right = (%d, %d)\n", Map->right->coordinate[0], Map->right->coordinate[1]);
-		Map->right = linking_the_map(Map->right, MAp);
+		Map->right->left = Map;
+		Map = Map->right;
+		printf("right = (%d, %d)\n", Map->coordinate[0], Map->coordinate[1]);
+		Map = linking_the_map(Map, MAp);
+		//Map = Map->left;
 		return Map;	
 	}else if(Map->down != NULL)
 	{
-		printf("down = (%d, %d)\n", Map->down->coordinate[0], Map->down->coordinate[1]);
-		Map->down = linking_the_map(Map->down, MAp);
+		Map->down->up = Map;
+		Map = Map->down;
+		printf("down = (%d, %d)\n", Map->coordinate[0], Map->coordinate[1]);
+		Map = linking_the_map(Map, MAp);
+		//Map = Map->up; 
 		return Map;
 	}
-	return NULL;
+	}
 }
 
 
@@ -181,6 +189,6 @@ int main()
 		//printf("Printing coordinate of the map .. \n");
 		//print_coordinate_of_the_map(Map);
 	}
-	print_the_map(Map);
+	//print_the_map(Map);
 	return 0;
 }
