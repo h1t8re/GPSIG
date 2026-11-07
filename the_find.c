@@ -51,18 +51,18 @@ map *initialize_map()
 	return MAp;
 }
 
-void print_the_map(map *Map)
+void print(map *Map)
 {
-	if((Map != NULL) & (Map->coordinate[0] != -1) & (Map->coordinate[1] != -1))
-		printf("(%d, %d)\n", Map->coordinate[0], Map->coordinate[1]);
+	//if((Map != NULL) & (Map->coordinate[0] != -1) & (Map->coordinate[1] != -1))
+	printf("(%d, %d)\n", Map->coordinate[0], Map->coordinate[1]);
 	if(Map->right != NULL)
-		print_the_map(Map->right);
+		print(Map->right);
 	else if(Map->down != NULL)
-		print_the_map(Map->down);
-	else if(Map->up != NULL)
-		print_the_map(Map->up);
-	else if(Map->left != NULL)
-		print_the_map(Map->left);
+		print(Map->down);
+	//if(Map->left != NULL)
+	//	print(Map->left);
+	//else if(Map->up != NULL)
+	//	print(Map->up);
 }
 
 map *construct_the_map(map *MAp, int *coordinate, int x, int y)
@@ -81,7 +81,8 @@ map *construct_the_map(map *MAp, int *coordinate, int x, int y)
                 MAp->down->coordinate[0] = coordinate[0];
                 MAp->down->coordinate[1] = coordinate[1];
         	MAp->down->up = MAp;
-	}else if(coordinate[0] > x)
+	}
+	if(coordinate[0] > x)
 	{
 		MAp->right = initialize_map();
 		MAp->right->left = MAp;
@@ -148,24 +149,25 @@ map *linking_the_map(map *Map, map *MAp)
 	if((Map->coordinate[0] == MAp->coordinate[0]) & (Map->coordinate[1] == MAp->coordinate[1]))
 	{
 		Map = MAp;
-		printf("0:(%d, %d)\n", Map->coordinate[0], Map->coordinate[1]);
+		print(MAp);
+		printf("(%d, %d)\n", Map->coordinate[0], Map->coordinate[1]);
 		return Map;	
 	}
 	if(Map->right != NULL)
 	{
 		Map->right->left = Map;
 		Map = Map->right;
+		linking_the_map(Map, MAp);
 		printf("right = (%d, %d)\n", Map->coordinate[0], Map->coordinate[1]);
-		Map = linking_the_map(Map, MAp);
-		//Map = Map->left;
+		Map = Map->left;
 		return Map;	
 	}else if(Map->down != NULL)
 	{
 		Map->down->up = Map;
 		Map = Map->down;
 		printf("down = (%d, %d)\n", Map->coordinate[0], Map->coordinate[1]);
-		Map = linking_the_map(Map, MAp);
-		//Map = Map->up; 
+		linking_the_map(Map, MAp);
+		Map = Map->up; 
 		return Map;
 	}
 	}
