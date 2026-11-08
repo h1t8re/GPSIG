@@ -40,7 +40,7 @@ int *get_xy(char *coordinate)
 
 MAP *allocate_memory_and_initialize_noeud()
 {
-	MAP *map = (MAP *)malloc(sizeof(struct Map *));
+	MAP *map = (MAP *)malloc(sizeof(struct Map));
 	map->coordinate = (int *)malloc(2*sizeof(int));
 	map->coordinate[0] = -1;
 	map->coordinate[1] = -1;
@@ -59,10 +59,10 @@ void print(MAP *map)
 		print(map->right);
 	if(map->down != NULL)
 		print(map->down);
-	//if(Map->left != NULL)
-	//	print(Map->left);
-	//if(Map->up != NULL)
-	//	print(Map->up);
+	//if(map->left != NULL)
+	//	print(map->left);
+	//if(map->up != NULL)
+	//	print(map->up);
 }
 
 MAP *construct_the_branch(MAP *branch, int *coordinate, int x, int y)
@@ -75,27 +75,27 @@ MAP *construct_the_branch(MAP *branch, int *coordinate, int x, int y)
 		branch->coordinate[0] = coordinate[0];
 		branch->coordinate[1] = coordinate[1];
 		printf("branch = (%d, %d)\n", branch->coordinate[0], branch->coordinate[1]);
-		//MAp->left = MAp;
-	}
-	else if(coordinate[0] > x)
+		return branch;
+	}else if(coordinate[0] > x)
 	{
 		branch->right = allocate_memory_and_initialize_noeud();
-		branch->right->coordinate[0] = -1;
-		branch->right->coordinate[1] = -1;
+		branch->right->coordinate[0] = x;
+		branch->right->coordinate[1] = y;
 		branch->right->left = branch;
-		construct_the_branch(branch->right, coordinate, x+1, y);
-		printf("branch->right = (%d, %d)\n", branch->right->coordinate[0], branch->right->coordinate[1]);
+		branch->right = construct_the_branch(branch->right, coordinate, x+1, y);
+		printf("branch->right = (%d, %d)\n", branch->coordinate[0], branch->coordinate[1]);
+		return branch;
 	}
 	else if(coordinate[1] > y)
         {               
                 branch->down = allocate_memory_and_initialize_noeud();
-		branch->down->coordinate[0] = -1;
-		branch->down->coordinate[1] = -1;
+		branch->down->coordinate[0] = x;
+		branch->down->coordinate[1] = y;
 		branch->down->up = branch;
-                construct_the_branch(branch->down, coordinate, x, y+1);
-		printf("branch->down = (%d, %d)\n", branch->down->coordinate[0], branch->down->coordinate[1]);
+                branch->down = construct_the_branch(branch->down, coordinate, x, y+1);
+		printf("branch->down = (%d, %d)\n", branch->coordinate[0], branch->coordinate[1]);
+		return branch;
 	}
-	return branch;
 }
 
 MAP **parse_data_and_construct_the_map(const char *data)
@@ -104,7 +104,7 @@ MAP **parse_data_and_construct_the_map(const char *data)
 	int j = 0;
 	int k = 0;
 	int *coord;
-	MAP **branches = (MAP **)malloc(sizeof(struct Map **));
+	MAP **branches = (MAP **)malloc(sizeof(struct Map *));
 	char *spliter0 = strdup("\n\0");
 	char *spliter1 = strdup(":\0");
 	char *spliter2 = strdup("  \0");
@@ -126,7 +126,7 @@ MAP **parse_data_and_construct_the_map(const char *data)
 			{
 				coord = get_xy(array2[j]);
 				branches[k] = construct_the_branch(branches[k], coord, 0, 0);
-				printf("coord = (%d, %d)\n", coord[0], coord[1]);
+				//printf("coord = (%d, %d)\n", coord[0], coord[1]);
 			}
 			j++;
 		}
@@ -152,25 +152,24 @@ MAP *linking_the_map(MAP *map, MAP *branch)
 		map = branch;
 		print(map);
 		printf("map = (%d, %d)\n", map->coordinate[0], map->coordinate[1]);
-		return map;	
-	}else if(map->right != NULL)
+		//return map;	
+	}
+	if(map->right != NULL)
 	{
 		map->right->left = map;
-		map = map->right;
-		linking_the_map(map, branch);
-		map = map->left;
+		map->right = linking_the_map(map->right, branch);
 		printf("right = (%d, %d)\n", map->coordinate[0], map->coordinate[1]);
-		return map;
-	}else if(map->down != NULL)
+		//return map;
+	}
+	if(map->down != NULL)
 	{
 		map->down->up = map;
-		map = map->down;
-		linking_the_map(map, branch);
-		map = map->up; 
+		map->down = linking_the_map(map->down, branch);
 		printf("down = (%d, %d)\n", map->coordinate[0], map->coordinate[1]);
-		return map;
+		//return map;
 	}
 	}
+	return map;
 }
 
 
@@ -186,7 +185,7 @@ int main()
 	while(branches[k] != NULL)
 	{
 		map = linking_the_map(map, branches[k]);
-		printf("branches[k]->coordinate[0] = %d | branches[k]->coordinate[1] = %d\n", branches[k]->coordinate[0], branches[k]->coordinate[1]);
+		printf("branches[%d]->coordinate[0] = %d | branches[%d]->coordinate[1] = %d\n", k, branches[k]->coordinate[0], k, branches[k]->coordinate[1]);
 		k++;
 		//printf("Printing coordinate of the map .. \n");
 		//print_coordinate_of_the_map(Map);
