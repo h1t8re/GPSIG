@@ -86,20 +86,36 @@ MAP *construct_the_branch(MAP *branch, int *coordinate, int x, int y)
 	}
 	if(coordinate[0] > x)
 	{
-		branch->right = allocate_memory_and_initialize_noeud();
-		branch->right->coordinate[0] = x;
-		branch->right->coordinate[1] = y;
-		branch->right->left = branch;
-		branch->right = construct_the_branch(branch->right, coordinate, x+1, y);
+		if(branch->right == NULL)
+		{
+			branch->right = allocate_memory_and_initialize_noeud();
+			branch->right->coordinate[0] = x;
+			branch->right->coordinate[1] = y;
+			branch->right->left = branch;
+			branch->right = construct_the_branch(branch->right, coordinate, x+1, y);
+		}else
+		{
+			branch = branch->right;
+			branch = construct_the_branch(branch,  coordinate, x+1, y);
+			branch = branch->left;
+		}
 		//printf("branch->right = (%d, %d)\n", branch->coordinate[0], branch->coordinate[1]);
 		//return branch;
 	}else if(coordinate[1] > y)
         {               
-                branch->down = allocate_memory_and_initialize_noeud();
-		branch->down->coordinate[0] = x;
-		branch->down->coordinate[1] = y;
-		branch->down->up = branch;
-                branch->down = construct_the_branch(branch->down, coordinate, x, y+1);
+                if(branch->down == NULL)
+		{
+			branch->down = allocate_memory_and_initialize_noeud();
+			branch->down->coordinate[0] = x;
+			branch->down->coordinate[1] = y;
+			branch->down->up = branch;
+                	branch->down = construct_the_branch(branch->down, coordinate, x, y+1);
+		}else
+		{
+			branch = branch->down;
+			branch = construct_the_branch(branch,  coordinate, x, y+1);
+			branch = branch->up;
+		}
 		//printf("branch->down = (%d, %d)\n", branch->coordinate[0], branch->coordinate[1]);
 		//return branch;
 	}
@@ -190,7 +206,7 @@ int main()
 	while(branches[k] != NULL)
 	{
 		printf("%d\n", k);	
-		map = constructing_the_map(map, branches[k]);
+		constructing_the_map(map, branches[k]);
 		printing_the_map(map);
 		//printf("branches[%d]->coordinate[0] = %d | branches[%d]->coordinate[1] = %d\n", k, branches[k]->coordinate[0], k, branches[k]->coordinate[1]);
 		k++;
