@@ -170,11 +170,30 @@ MAP **parse_data_and_construct_branches(const char *data)
 	return branches;
 }
 
+MAP *duplicating_the_branch(MAP *map, MAP * branch)
+{
+	map->coordinate[0] = branch->coordinate[0];
+	map->coordinate[1] = branch->coordinate[1];
+	if(branch->right != NULL)
+	{
+		map->right = branch->right;
+		map = duplicating_the_branch(map->right, branch->right);
+	}
+	if(branch->down != NULL)
+	{
+		map->down = branch->down;
+		map = duplicating_the_branch(map->down, branch->down);
+	}
+	return map;
+
+}
+
 MAP *constructing_the_map(MAP *map, MAP *branch)
 {
 		if((map->coordinate[0] == branch->coordinate[0]) && (map->coordinate[1] == branch->coordinate[1]))
                 {
                         map = branch;
+			map = duplicating_the_branch(map, branch);
                         printf("map = branch = (%d, %d)\n", map->coordinate[0], map->coordinate[1]);        
                 	return map;
 		}
