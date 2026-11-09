@@ -53,16 +53,17 @@ MAP *allocate_memory_and_initialize_noeud()
 
 void printing_the_map(MAP *map)
 {
-	if((map->coordinate[0] != -1) & (map->coordinate[1] != -1))
-		printf("map = (%d, %d)\n", map->coordinate[0], map->coordinate[1]);
+	printf("map = (%d, %d)\n", map->coordinate[0], map->coordinate[1]);
+	//if((map->coordinate[0] != -1) & (map->coordinate[1] != -1))
 	if(map->right != NULL)
 	{
 		printing_the_map(map->right);
+		//printf("map = (%d, %d)\n", map->coordinate[0], map->coordinate[1]);
 	}
 	if(map->down != NULL)
 	{
-	
 		printing_the_map(map->down);
+		//printf("map = (%d, %d)\n", map->coordinate[0], map->coordinate[1]);
 	}
 }
 

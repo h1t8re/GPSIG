@@ -53,15 +53,13 @@ TREE *allocate_memory_and_initialize_noeud()
 
 void printing_the_tree(TREE *tree)
 {
-	if((tree->coordinate[0] != -1) & (tree->coordinate[1] != -1))
-		printf("tree = (%d, %d)\n", tree->coordinate[0], tree->coordinate[1]);
+	printf("tree = (%d, %d)\n", tree->coordinate[0], tree->coordinate[1]);
 	if(tree->right != NULL)
 	{
 		printing_the_tree(tree->right);
 	}
 	if(tree->down != NULL)
 	{
-	
 		printing_the_tree(tree->down);
 	}
 }
@@ -139,7 +137,7 @@ TREE **parse_data_and_construct_branches(const char *data)
 			if(strlen(array2[j]) != 0)
 			{
 				coord = get_xy(array2[j]);
-				branches[k] = construct_the_branch(branches[k], coord, 0, 0);
+				branches[k] = construct_the_branch(branches[k], coord, branckes[k]->coordinate[0], branches[k]->coordinate[1]);
 			}
 			j++;
 		}
