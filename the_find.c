@@ -165,7 +165,7 @@ MAP *duplicating_the_branch(MAP *map, MAP * branch)
 		map->right = branch->right;
 		map->right = duplicating_the_branch(map->right, branch->right);
 	}
-	if(branch->down != NULL)
+	else if(branch->down != NULL)
 	{
 		map->down = branch->down;
 		map->down = duplicating_the_branch(map->down, branch->down);
@@ -193,7 +193,7 @@ MAP *constructing_the_map(MAP *map, MAP *branch)
 
 int main()
 {
-	const char *data = read_file_v1("./space.glyph");
+	const char *data = read_file_v1("./coordinate.glyph");
 	int k = 0;
 	printf("%s\n", data);
 	MAP **branches = parse_data_and_construct_branches(data);
