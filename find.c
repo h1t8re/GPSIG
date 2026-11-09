@@ -137,7 +137,7 @@ TREE **parse_data_and_construct_branches(const char *data)
 			if(strlen(array2[j]) != 0)
 			{
 				coord = get_xy(array2[j]);
-				branches[k] = construct_the_branch(branches[k], coord, branckes[k]->coordinate[0], branches[k]->coordinate[1]);
+				branches[k] = construct_the_branch(branches[k], coord, branches[k]->coordinate[0], branches[k]->coordinate[1]);
 			}
 			j++;
 		}
