@@ -8,7 +8,7 @@ typedef struct Map{
 	struct Map *up;
 	struct Map *right;
 	struct Map *left;
-}map;
+}TREE;
 
 int *get_xy(char *coordinate)
 {
@@ -38,146 +38,172 @@ int *get_xy(char *coordinate)
 	return coord;
 }
 
-map *initialize_map()
+TREE *allocate_memory_and_initialize_noeud()
 {
-	map *MAp = (map *)malloc(sizeof(struct Map *));
-	MAp->coordinate = (int *)malloc(2*sizeof(int));
-	MAp->coordinate[0] = -3;
-	MAp->coordinate[1] = -3;
-	MAp->right = NULL;
-	MAp->down = NULL;
-	MAp->left = NULL;
-	MAp->up = NULL;
-	return MAp;
+	TREE *tree = (TREE *)malloc(sizeof(struct Map));
+	tree->coordinate = (int *)malloc(2*sizeof(int));
+	tree->coordinate[0] = -1;
+	tree->coordinate[1] = -1;
+	tree->right = NULL;
+	tree->down = NULL;
+	tree->left = NULL;
+	tree->up = NULL;
+	return tree;
 }
 
-void print_coordinate_of_the_map(map *MAp)
+void printing_the_tree(TREE *tree)
 {
-	if((MAp->coordinate[0] != -1) & (MAp->coordinate[1] != -1))
-		printf("MAp->coordinate[0] = %d | MAp->coordinate[1] = %d\n", MAp->coordinate[0], MAp->coordinate[1]);
-	if(MAp->right != NULL)
-		print_coordinate_of_the_map(MAp->right);
-	if(MAp->down != NULL)
-		print_coordinate_of_the_map(MAp->down);
-	if(MAp->up != NULL)
-		print_coordinate_of_the_map(MAp->up);
-	if(MAp->left != NULL)
-		print_coordinate_of_the_map(MAp->left);
-
-}
-
-map *construct_the_map(map *MAp, int *coordinate, int x, int y)
-{
-	printf("x = %d | y = %d\n", x, y);
-	if(coordinate[0] == x)
+	if((tree->coordinate[0] != -1) & (tree->coordinate[1] != -1))
+		printf("tree = (%d, %d)\n", tree->coordinate[0], tree->coordinate[1]);
+	if(tree->right != NULL)
 	{
-		MAp->right = initialize_map();
-		MAp->right->coordinate[0] = coordinate[0];
-		MAp->right->coordinate[1] = coordinate[1];
-		MAp->right->left = MAp;
+		printing_the_tree(tree->right);
 	}
-	else if(coordinate[1] == y)
-        {
-                MAp->down = initialize_map();
-                MAp->down->coordinate[0] = coordinate[0];
-                MAp->down->coordinate[1] = coordinate[1];
-        	MAp->down->up = MAp;
+	if(tree->down != NULL)
+	{
+	
+		printing_the_tree(tree->down);
+	}
+}
+
+TREE *construct_the_branch(TREE *branch, int *coordinate, int x, int y)
+{
+	if(branch == NULL)
+		branch = allocate_memory_and_initialize_noeud();
+	if((coordinate[0] == x) & (coordinate[1] == y))
+	{
+		branch->coordinate[0] = coordinate[0];
+		branch->coordinate[1] = coordinate[1];
+		return branch;
 	}
 	if(coordinate[0] > x)
 	{
-		MAp->right = initialize_map();
-		MAp->right->left = MAp;
-		construct_the_map(MAp->right, coordinate, x+1, y);
+		if(branch->right == NULL)
+		{
+			branch->right = allocate_memory_and_initialize_noeud();
+			branch->right->coordinate[0] = x;
+			branch->right->coordinate[1] = y;
+			branch->right->left = branch;
+			branch->right = construct_the_branch(branch->right, coordinate, x+1, y);
+		}else
+		{
+			branch->right->left = branch;
+			branch = branch->right;
+			branch = construct_the_branch(branch,  coordinate, x+1, y);
+			branch = branch->left;
+		}
 	}
 	else if(coordinate[1] > y)
         {               
-                MAp->down = initialize_map();
-		MAp->down->up = MAp;
-                construct_the_map(MAp->down, coordinate, x, y+1);
+                if(branch->down == NULL)
+		{
+			branch->down = allocate_memory_and_initialize_noeud();
+			branch->down->coordinate[0] = x;
+			branch->down->coordinate[1] = y;
+			branch->down->up = branch;
+                	branch->down = construct_the_branch(branch->down, coordinate, x, y+1);
+		}else
+		{
+			branch->down->up = branch;
+			branch = branch->down;
+			branch = construct_the_branch(branch,  coordinate, x, y+1);
+			branch = branch->up;
+		}
 	}
-
-	return MAp;
+	return  branch;
 }
 
-map **parse_data_and_construct_the_map(const char *data)
+TREE **parse_data_and_construct_branches(const char *data)
 {
 	int i = 0;
 	int j = 0;
 	int k = 0;
 	int *coord;
-	map **MAp = (map **)malloc(sizeof(struct Map **));
+	TREE **branches = (TREE **)malloc(sizeof(struct Map *));
 	char *spliter0 = strdup("\n\0");
 	char *spliter1 = strdup(":\0");
 	char *spliter2 = strdup("  \0");
 	char **array0 = strsplit_v1(strdup(data), strdup(spliter0));
 	char **array1;
 	char **array2;
-	int x = 0;
-	int y = 0;
 	while(array0[i] != '\0')
 	{
 		array1 = strsplit_v1(strdup(array0[i]), strdup(spliter1));
 		coord  = get_xy(array1[0]);
-		MAp[k] = initialize_map(); 
-		MAp[k]->coordinate[0] = coord[0];
-		MAp[k]->coordinate[1] = coord[1];
-		printf("(%d, %d):  ", MAp[k]->coordinate[0], MAp[k]->coordinate[1]);
+		branches[k] = allocate_memory_and_initialize_noeud(); 
+		branches[k]->coordinate[0] = coord[0];
+		branches[k]->coordinate[1] = coord[1];
 		array2 = strsplit_v1(strdup(array1[1]), strdup(spliter2));
 		while(array2[j] != '\0')
 		{
 			if(strlen(array2[j]) != 0)
 			{
 				coord = get_xy(array2[j]);
-				MAp[k] = construct_the_map(MAp[k], coord, 0, 0);
-				printf("coord = (%d, %d)  ", coord[0], coord[1]);
+				branches[k] = construct_the_branch(branches[k], coord, 0, 0);
 			}
 			j++;
 		}
-		printf("\n");
 		j = 0;
 		k++;
-		MAp = (map **)realloc(MAp, (k+1)*sizeof(struct Map **));
-		MAp[k] = NULL;
+		branches = (TREE **)realloc(branches, (k+1)*sizeof(struct Map *));
+		branches[k] = NULL;
 		i++;
 		free(array1);
 		free(array2);
 		free(coord);
 	}
-	MAp[k] = NULL;
-	return MAp;
+	branches[k] = NULL;
+	return branches;
 }
 
-void print_the_map(map **MAp)
+TREE *duplicating_the_branch(TREE *tree, TREE * branch)
 {
-	int i = 0;
-	int k = 0;
-	while(MAp[k] != NULL)
+	tree->coordinate[0] = branch->coordinate[0];
+	tree->coordinate[1] = branch->coordinate[1];
+	if(branch->right != NULL)
 	{
-		printf("k = %d", k);
-		if(MAp[k]->right != NULL)
-		{
-			for(int j = 0; j < (MAp[k]->right->coordinate[0] - MAp[k]->coordinate[0]); j++)
-			{	
-				printf("-");
-			}
-		}
-		i = 0;
-		while(i <= MAp[k]->right->coordinate[0])
-		{
-			printf(" ");
-			i++;
-		}
-		i = 0;
-		printf("|");
-		k++;
+		tree->right = branch->right;
+		tree->right = duplicating_the_branch(tree->right, branch->right);
 	}
+	else if(branch->down != NULL)
+	{
+		tree->down = branch->down;
+		tree->down = duplicating_the_branch(tree->down, branch->down);
+	}
+	return tree;
+
+}	
+
+TREE *constructing_the_tree(TREE *tree, TREE *branch)
+{
+		if((tree->coordinate[0] == branch->coordinate[0]) && (tree->coordinate[1] == branch->coordinate[1]))
+                {
+			tree = duplicating_the_branch(tree, branch);
+		}
+		if(tree->right != NULL)
+		{
+			constructing_the_tree(tree->right, branch);
+		}
+		if(tree->down != NULL)
+		{
+			constructing_the_tree(tree->down, branch);
+		}
+		return tree;
 }
 
 int main()
 {
-	const char *data = read_file_v1("./space.glyph");
+	const char *data = read_file_v1("./coordinate.glyph");
+	int k = 0;
 	printf("%s\n", data);
-	map **MAp = parse_data_and_construct_the_map(data);
-	//print_the_map(MAp);
+	TREE **branches = parse_data_and_construct_branches(data);
+	TREE *tree = branches[k];
+	k++;
+	while(branches[k] != NULL)
+	{
+		tree = constructing_the_tree(tree, branches[k]);
+		k++;
+	}
+	printing_the_tree(tree);
 	return 0;
 }
