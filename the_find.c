@@ -53,7 +53,7 @@ MAP *allocate_memory_and_initialize_noeud()
 
 void printing_the_map(MAP *map)
 {
-	if((map->right == NULL) | (map->down == NULL))
+	if((map->coordinate[0] != -1) & map->coordinate[1] != -1)
 		printf("map = (%d, %d)\n", map->coordinate[0], map->coordinate[1]);
 	if(map->right != NULL)
 	{
@@ -92,9 +92,8 @@ MAP *construct_the_branch(MAP *branch, int *coordinate, int x, int y)
 		branch->right->left = branch;
 		branch->right = construct_the_branch(branch->right, coordinate, x+1, y);
 		//printf("branch->right = (%d, %d)\n", branch->coordinate[0], branch->coordinate[1]);
-		return branch;
-	}
-	else if(coordinate[1] > y)
+		//return branch;
+	}else if(coordinate[1] > y)
         {               
                 branch->down = allocate_memory_and_initialize_noeud();
 		branch->down->coordinate[0] = x;
@@ -102,9 +101,9 @@ MAP *construct_the_branch(MAP *branch, int *coordinate, int x, int y)
 		branch->down->up = branch;
                 branch->down = construct_the_branch(branch->down, coordinate, x, y+1);
 		//printf("branch->down = (%d, %d)\n", branch->coordinate[0], branch->coordinate[1]);
-		return branch;
+		//return branch;
 	}
-	return  NULL;
+	return  branch;
 }
 
 MAP **parse_data_and_construct_branches(const char *data)
