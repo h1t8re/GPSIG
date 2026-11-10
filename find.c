@@ -92,7 +92,7 @@ TREE *construct_the_branch(TREE *branch, int *coordinate, int x, int y)
 		}
 	}
 	else if(coordinate[1] > y)
-        {               
+        {
                 if(branch->down == NULL)
 		{
 			branch->down = allocate_memory_and_initialize_noeud();
@@ -128,7 +128,7 @@ TREE **parse_data_and_construct_branches(const char *data)
 	{
 		array1 = strsplit_v1(strdup(array0[i]), strdup(spliter1));
 		coord  = get_xy(array1[0]);
-		branches[k] = allocate_memory_and_initialize_noeud(); 
+		branches[k] = allocate_memory_and_initialize_noeud();
 		branches[k]->coordinate[0] = coord[0];
 		branches[k]->coordinate[1] = coord[1];
 		array2 = strsplit_v1(strdup(array1[1]), strdup(spliter2));
@@ -170,7 +170,7 @@ TREE *duplicating_the_branch(TREE *tree, TREE * branch)
 	}
 	return tree;
 
-}	
+}
 
 TREE *constructing_the_tree(TREE *tree, TREE *branch)
 {
@@ -191,7 +191,7 @@ TREE *constructing_the_tree(TREE *tree, TREE *branch)
 
 int main()
 {
-	const char *data = read_file_v1("./coordinate.glyph");
+	const char *data = read_file_v1("./coordinate_0.coord");
 	int k = 0;
 	printf("%s\n", data);
 	TREE **branches = parse_data_and_construct_branches(data);
