@@ -1,5 +1,5 @@
 /*
-	Copyright (c) Chems Eddine h1t8re (borguate) from 06021996 After Jesus Christe.
+	Copyright (c) Chems Eddine h1t8re (Borguate) from 06021996 After Jesus Christ' ..
 */
 #include <stdio.h>
 #include <stdlib.h>
