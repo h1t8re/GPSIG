@@ -189,9 +189,14 @@ TREE *constructing_the_tree(TREE *tree, TREE *branch)
 		return tree;
 }
 
-int main()
+int main(int argc, char *argv[])
 {
-	const char *data = read_file_v1("./coordinate_0.coord");
+	if(argc != 2)
+	{
+		printf("Usage: ./find [coordinate_file_name]\n");
+		return 1;
+	}
+	const char *data = read_file_v1(strdup(argv[1]));
 	int k = 0;
 	printf("%s\n", data);
 	TREE **branches = parse_data_and_construct_branches(data);
