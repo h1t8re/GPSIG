@@ -5,12 +5,12 @@
 #include <stdlib.h>
 #include "include/stdlib.h"
 
-typedef struct Map{
+typedef struct Tree{
 	int *coordinate;
-	struct Map *down;
-	struct Map *up;
-	struct Map *right;
-	struct Map *left;
+	struct Tree *down;
+	struct Tree *up;
+	struct Tree *right;
+	struct Tree *left;
 }TREE;
 
 int *get_xy(char *coordinate)
@@ -43,7 +43,7 @@ int *get_xy(char *coordinate)
 
 TREE *allocate_memory_and_initialize_noeud()
 {
-	TREE *tree = (TREE *)malloc(sizeof(struct Map));
+	TREE *tree = (TREE *)malloc(sizeof(struct Tree));
 	tree->coordinate = (int *)malloc(2*sizeof(int));
 	tree->coordinate[0] = -1;
 	tree->coordinate[1] = -1;
@@ -120,7 +120,7 @@ TREE **parse_data_and_construct_branches(const char *data)
 	int j = 0;
 	int k = 0;
 	int *coord;
-	TREE **branches = (TREE **)malloc(sizeof(struct Map *));
+	TREE **branches = (TREE **)malloc(sizeof(struct Tree *));
 	char *spliter0 = strdup("\n\0");
 	char *spliter1 = strdup(":\0");
 	char *spliter2 = strdup("  \0");
@@ -146,7 +146,7 @@ TREE **parse_data_and_construct_branches(const char *data)
 		}
 		j = 0;
 		k++;
-		branches = (TREE **)realloc(branches, (k+1)*sizeof(struct Map *));
+		branches = (TREE **)realloc(branches, (k+1)*sizeof(struct Tree *));
 		branches[k] = NULL;
 		i++;
 		free(array1);
