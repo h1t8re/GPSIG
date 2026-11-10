@@ -56,7 +56,7 @@ TREE *allocate_memory_and_initialize_noeud()
 
 void printing_the_tree(TREE *tree)
 {
-	printf("tree = (%d, %d)\n", tree->coordinate[0], tree->coordinate[1]);
+	printf("(%d, %d)\n", tree->coordinate[0], tree->coordinate[1]);
 	if(tree->right != NULL)
 	{
 		printing_the_tree(tree->right);
