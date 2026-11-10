@@ -1,3 +1,6 @@
+/*
+	Copyright (c) Chems Eddine h1t8re (borguate) from 06021996 After Jesus Christe.
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include "include/stdlib.h"
