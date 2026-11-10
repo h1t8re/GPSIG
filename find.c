@@ -166,7 +166,7 @@ TREE *duplicating_the_branch(TREE *tree, TREE * branch)
 		tree->right = branch->right;
 		tree->right = duplicating_the_branch(tree->right, branch->right);
 	}
-	else if(branch->down != NULL)
+	if(branch->down != NULL)
 	{
 		tree->down = branch->down;
 		tree->down = duplicating_the_branch(tree->down, branch->down);
